@@ -74,30 +74,28 @@
 
 \usepackage{stfloats}
 
+\renewcommand\arraystretch{1.3}
+
 % Tambahkan format tanda hubung yang benar di sini
-\hyphenation{
-  ro-ket
-  me-ngem-bang-kan
-  per-hi-tu-ngan
-}
+\hyphenation{ }
 
 \begin{document}
 
-  \input{deskripsi/judul.tex}
-  \input{deskripsi/abstrak.tex}
+\input{deskripsi/judul.tex}
+\input{deskripsi/abstrak.tex}
 
-  % Ubah bagian berikut sesuai dengan konten-konten yang akan dimasukkan pada dokumen
-  \input{konten/1-latar-belakang.tex}
-  \input{konten/2-penelitian-terkait.tex}
-  \input{konten/3-desain-implementasi.tex}
-  \input{konten/4-lorem-ipsum.tex}
-  \input{konten/5-kesimpulan.tex}
+% Ubah bagian berikut sesuai dengan konten-konten yang akan dimasukkan pada dokumen
+\input{konten/1-latar-belakang.tex}
+%  \input{konten/2-penelitian-terkait.tex}
+\input{konten/3-desain-implementasi.tex}
+\input{konten/4-hasil-pembahasan.tex}
+\input{konten/5-kesimpulan.tex}
 
-  % Menampilkan daftar pustaka dengan format IEEE
-  \bibliographystyle{IEEEtranN}
-  \bibliography{pustaka/pustaka.bib}
+% Menampilkan daftar pustaka dengan format IEEE
+\bibliographystyle{IEEEtranN}
+\bibliography{pustaka/pustaka.bib}
 
-  % Menyeimbangkan bagian akhir di kedua kolom
-  \balance
+% Menyeimbangkan bagian akhir di kedua kolom
+\balance
 
 \end{document}
