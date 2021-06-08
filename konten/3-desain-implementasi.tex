@@ -157,7 +157,9 @@ Untuk lebih jelasnya, silahkan lihat tabel \ref{tab:dataset_section}. Dari tabel
 \subsection{Perancangan Arsitektur BERT}
 BERT adalah salah satu implementasi pembelajaran mesin yang paling mutakhir saat ini. Merupakan pengembangan lebih lanjut dari implementasi Transformer, BERT memiliki tingkat akurasi yang lebih tinggi dalam memahami konteks pada suatu teks mentah apabila dibandingkan dengan beberapa implementasi pengembangan transformer lain.
 
-Salah satu hal yang membedakan antara BERT dengan model - model yang lain adalah cara BERT di \textit{training}. Terdapat 2 langkah yang dilakukan untuk melakukan \textit{training} pada BERT. Yang pertama adalah dengan menutup sebagian kata - kata yang dijadikan sebagai masukan BERT,
+Salah satu hal yang membedakan antara BERT dengan model - model yang lain adalah cara BERT di \textit{training}. Terdapat 2 langkah yang dilakukan untuk melakukan \textit{training} pada BERT. Yang pertama adalah dengan menutup sebagian kata - kata yang dijadikan sebagai masukan BERT, atau yang biasa disebut sebagai MLM (\textit{Masked Language Model}). Model akan diminta untuk melihat apa hubungan antara kata yang ditutup tersebut dengan kata lainnya. Langkah selanjutnya adalah \textit{Next Sentence Prediction} dimana BERT akan digunakan untuk menentukan apakah suatu kalimat B merupakan kelanjutan dari kalimat A. Kedua metode \textit{training} tersebut adalah \textit{unsupervised task} sehingga hanya diperlukan dataset saja.
+
+Dalam penelitian ini, kami menggunakan pendekatan \textit{fine-tuning}, dimana model BERT yang sudah di \textit{pre-training} sebelumnya, akan kami gabungkan dengan \textit{layer} klasifikasi. Dalam hal ini, kami menggunakan \textit{Linear Regression} sebagai \textit{layer} klasifikasi.
 
 \subsection{Training}
 
