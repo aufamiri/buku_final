@@ -159,7 +159,16 @@ BERT adalah salah satu implementasi pembelajaran mesin yang paling mutakhir saat
 
 Salah satu hal yang membedakan antara BERT dengan model - model yang lain adalah cara BERT di \textit{training}. Terdapat 2 langkah yang dilakukan untuk melakukan \textit{training} pada BERT. Yang pertama adalah dengan menutup sebagian kata - kata yang dijadikan sebagai masukan BERT, atau yang biasa disebut sebagai MLM (\textit{Masked Language Model}). Model akan diminta untuk melihat apa hubungan antara kata yang ditutup tersebut dengan kata lainnya. Langkah selanjutnya adalah \textit{Next Sentence Prediction} dimana BERT akan digunakan untuk menentukan apakah suatu kalimat B merupakan kelanjutan dari kalimat A. Kedua metode \textit{training} tersebut adalah \textit{unsupervised task} sehingga hanya diperlukan dataset saja.
 
-Dalam penelitian ini, kami menggunakan pendekatan \textit{fine-tuning}, dimana model BERT yang sudah di \textit{pre-training} sebelumnya, akan kami gabungkan dengan \textit{layer} klasifikasi. Dalam hal ini, kami menggunakan \textit{Linear Regression} sebagai \textit{layer} klasifikasi.
+\begin{figure*}[h!]
+    \begin{center}
+        \includegraphics[width= 0.9\textwidth]{gambar/bert_arch.png}
+        \caption{Arsitektur BERT dalam penelitian ini}
+        \label{fig: bert_arch}
+    \end{center}
+\end{figure*}
+
+
+Dalam penelitian ini, kami menggunakan pendekatan \textit{fine-tuning}, dimana model BERT yang sudah di \textit{pre-training} sebelumnya, akan kami gabungkan dengan \textit{layer} klasifikasi. Dalam hal ini, kami menggunakan \textit{Linear Regression} sebagai \textit{layer} klasifikasi. Gambar \ref{fig:bert_arch} merupakan arsitektur BERT untuk penelitian ini.
 
 \subsection{Training}
 
@@ -183,7 +192,7 @@ Pada tahap ini juga dilakukan pengaturan ukuran \textit{batch}, \textit{learning
 
 \subsection{Validasi}
 
-Dari model yang sudah dibentuk pada saat proses \textit{training}, akan dilakukan pengujian terhadap data yang sama sekali baru dan tidak digunakan selama proses \textit{trainig}. Hal ini untuk menghindari bias yang mungkin terjadi apabila model diuji pada data yang sama yang digunakan pada saat proses \textit{training}. Proses inilah yang disebut dengan proses validasi.
+Dari model yang sudah dibentuk pada saat proses \textit{training}, akan dilakukan pengujian terhadap data yang sama sekali baru dan tidak digunakan selama proses \textit{training}. Hal ini untuk menghindari bias yang mungkin terjadi apabila model diuji pada data yang sama yang digunakan pada saat proses \textit{training}. Proses inilah yang disebut dengan proses validasi.
 
 Berdasarkan dari data akurasi yang didapat dari proses validasi, maka dapat diambil keputusan apakah masih diperlukan optimisasi dan melakukan \textit{training} lagi, atau akurasi yang didapat sudah dianggap cukup baik.
 
