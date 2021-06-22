@@ -1,3 +1,129 @@
 % Ubah judul dan label berikut sesuai dengan yang diinginkan.
 \section{Hasil dan Pembahasan}
 \label{sec:hasilpembahasan}
+
+% Ubah bagian-bagian berikut dengan isi dari pengujian dan analisis
+Pada penelitian ini dipaparkan hasil pengujian serta analisis yang dilakukan sesuai dengan desain sistem yang sudah dirancang pada bab sebelumnya. Dataset yang digunakan berasal dari \url{data.mendeley.com} ditambah dengan dataset yang berasal dari proses \textit{webcrawling} sendiri. Pengujian dilakukan dengan beberapa bagian sebagai berikut :
+
+\begin{enumerate}[nolistsep]
+    \item Pengujian Performa berdasar pada Penggalan Kata yang Diambil
+    \item Pengujian Performa berdasarkan model BERT yang digunakan
+    \item Pengujian Performa berdasarkan Pendekatan Cara \textit{Training}.
+\end{enumerate}
+
+Pada pengujian, masing - masing model menggunakan Google Collab dengan spesifikasi \textit{hardware} seperti yang dilampirkan pada tabel \ref{tab:specs_collab}
+
+\begin{table}
+    \caption{spesifikasi PC yang digunakan}
+    \label{tab:specs_collab}
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Prosessor}            & 2 v-core Intel(R) Xeon(R) CPU @ 2.20GHz   \\ \hline
+        \textbf{RAM}                  & Virtual Memory : 12GB                     \\ \hline
+        \textit{\textbf{Storage}}     & SSD : 69GB                                \\ \hline
+        \multirow{2}{*}{\textbf{GPU}} & Nvidia Tesla T4 16GB                      \\ \cline{2-2}
+                                      & Nvidia K80 12GB                           \\ \hline
+        \textbf{Sistem Operasi}       & Ubuntu 18.04.5 LTS (Bionic Beaver) 64-bit \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Pengujian Performa berdasar pada Penggalan Kata yang Diambil}
+
+Untuk saat ini, BERT hanya dapat memproses sebanyak 512 token sekaligus. Sehingga, untuk melakukan pemprosesan pada data dengan teks yang panjang, diperlukan pemotongan teks agar panjang teks menjadi sesuai.
+
+Pengujian performa berdasar pada penggalan kata yang diambil ini bertujuan untuk mengetahui tingkat akurasi model BERT pada teks dengan cara pemotongan yang berbeda. Pembedaan ini dilakukan berdasarkan pada adanya berita yang menuliskan kesimpulan di awal, atau bisa juga menuliskan kesimpulan di akhir. Alternatif lain adalah mengambil sebagian teks di bagian awal dan mengambil sisanya di bagian akhir. Maka dari itu, dalam pengujian performa ini dilakukan dengan membagi teks pada beberapa cara memenggal kata, dengan rincian sebagai berikut :
+
+\begin{enumerate}
+    \item Mengambil bagian awal teks
+
+          Terdapat beberapa ciri - ciri yang terdapat pada kebanyakan teks berita berbahasa Indonesia, salah satu dari ciri - ciri tersebut adalah menuliskan ringkasan berita pada paragraf awal kalimat. Format seperti ini biasanya cukup sering ditemui terutama pada berita yang memanfaatkan fitur halaman pada teks beritanya. Karenanya, pada jenis - jenis berita seperti ini, orang hanya perlu melihat beberapa kalimat awal untuk mengetahui apakah bahwa berita tersebut valid dan dapat dipercaya.
+
+    \item Mengambil bagian akhir teks
+
+          Mirip seperti pengujian dengan mengambil bagian awal teks, terdapat ciri - ciri lain yang biasanya terdapat pada teks berita berbahasa Indonesia adalah adanya kesimpulan pada bagian akhir teks berita. Sehingga, setelah isi berita yang biasanya dibahas cukup dalam, pembaca dapat mengetahui bagaimana dan apa hubungan setiap informasi yang disajikan dengan peristiwa yang sedang dibahas dalam berita.
+
+    \item Mengambil 129 token dari bagian awal teks dan 383 token dari bagian akhir teks
+
+          Pengujian ini berdasarkan pada penelitian Chi Sun et al. yang menemukan bahwa dengan strategi pengambilan teks yang dibagi dua seperti ini akan dapat memberikan nilai akurasi yang lebih baik apabila dibandingkan dengan mengambil hanya di bagian awal maupun di bagian akhir saja \cite{sun2019fine}. Alasan dari penyebab lebih tingginya akurasi adalah karena dengan mengambil sebagian di awal maka sebagian dari ringkasan berita akan didapatkan, sedangkan mengambil sebagian di akhir adalah agar kesimpulan berita juga masuk ke dalam proses \textit{training}. Namun, pengujian tersebut dilakukan pada dataset teks berita berbahasa Inggris sehingga masih harus dilakukan pengujian lagi pada dataset teks berita berbahasa Indonesia.
+
+\end{enumerate}
+
+Dari total data yang berjumlah 1621 data, akan diambil 18\% nya sebagai dataset pengujian, sehingga berjumlah 292 dataset sebagai pengujian. Parameter pada pengujian untuk \textit{training} di atur agar sama untuk setiap pengujian, \textit{epoch} sebesar 7, \textit{leearning rate} sebesar 2e-5, dan \textit{epsilon} sebesar 1e-8, hal yang sama juga dilakukan pada model, pengujian ini menggunakan model BERT yang telah di-\textit{pre-trained} oleh Indobert. Untuk lebih jelasnya, silahkan lihat Tabel \ref{tab: truncate_param} yang berisi rincian parameter dan model yang digunakan untuk proses \textit{training}.
+
+\begin{table}
+    \caption{Konfigurasi Parameter Untuk Pengujian berdasarkan Pemotongan Kata}
+    \label{tab: truncate_param}
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textit{\textbf{epoch}}          & 3                              \\ \hline
+        \textit{\textbf{learning rates}} & 2e-5                           \\ \hline
+        \textit{\textbf{epsilon}}        & 1e-4                           \\ \hline
+        \textbf{model}                   & indobenchmark/indobert-base-p1 \\ \hline
+    \end{tabular}
+\end{table}
+
+Keluaran dari model akan dibandingkan dengan label pada dataset, yang kemudian akan dihitung untuk menghasilkan \textit{confusion matrix}, \textit{recall, precision, accuracy} dan \textit{f1-score} sesuai dengan rumus yang telah dijelaskan sebelumnya.
+
+\begin{table}
+    \centering
+    \caption{Performa pada pengujian berdasar pada lokasi pemotongan kata}
+    \label{tab: truncate_result}
+    \begin{tabular}{|p{.12\textwidth}|l|l|l|l|}
+        \hline
+        \textbf{lokasi pemotongan}      & \textit{\textbf{recall}} & \textit{\textbf{precision}} & \textit{\textbf{f1-score}} & \textit{\textbf{accuracy}} \\ \hline
+        awal                            & \textbf{89\%}            & \textbf{90\%}               & \textbf{89\%}              & \textbf{89\%}              \\ \hline
+        akhir                           & 88\%                     & 85\%                        & 86\%                       & 86\%                       \\ \hline
+        gabungan (129 awal + 383 akhir) & 88\%                     & 88\%                        & 88\%                       & 87\%                       \\ \hline
+    \end{tabular}
+\end{table}
+
+Seperti bisa dilihat pada tabel \ref{tab: truncate_result}, metode pemotongan teks dengan hanya mengambil bagian awal saja memiliki tingkat akurasi yang paling tinggi dan memiliki nilai \textit{recall} dan \textit{precision} yang seimbang. Hal ini berbeda dengan apabila dilakukan pemotongan pada bagian akhir teks yang menunjukkan ada kemungkinan lebih besar bagi model untuk mengklasifikasi suatu teks berita termasuk ke dalam berita palsu. Metode pemotongan yang menggabungkan 129 token dari awal dan 383 token dari bagian akhir teks memiliki rasio nilai \textit{recall} dan \textit{precision} yang bagus juga sama seperti rasio nilai pada pemotongan pada bagian awal teks, namun, secara isi nilai masih kalah.
+
+\subsection{Pengujian Performa berdasarkan model BERT yang digunakan}
+
+Terdapat banyak sekali model BERT yang sudah dibuat oleh berbagai orang di internet, ada model yang memiliki kemampuan \textit{multilanguage} sehingga bisa digunakan di berbagai bahasa sekaligus, namun kebanyakan model yang beredar adalah model yang menggunakan bahasa yang spesifik. Hal ini karena waktu \textit{pre-training} yang lebih singkat karena dataset yang lebih sedikit apabila dibandingkan model dengan kemampuan \textit{multilanguage} dan karena waktu \textit{pre-training} lebih sedikit, maka sumber daya yang digunakan juga menjadi lebih sedikit. Selain itu, dan hal ini adalah yang paling penting, hasil akurasi dari model yang hanya menggunakan 1 bahasa memiliki tingkat akurasi yang lebih tinggi apabila dibandingkan dengan model dengan banyak bahasa sekaligus. Maka dari itu, kami menggunakan beberapa model dengan rincian sebagai berikut :
+
+\begin{enumerate}
+    \item bert-base-bahasa-standard-case
+
+          Merupakan model BERT yang dibuat oleh
+
+\end{enumerate}
+
+Untuk model BERT yang menggunakan hanya bahasa Indonesia, terdapat 2 model yang bisa ditemukan pada waktu buku ini ditulis. Yang pertama dibuat oleh Bryan Wilie et al., sebagai bagian dari pengujian \textit{benchmark} berbahasa Indonesia dengan model BERT yang dilatih khusus dengan dataset berbahasa Indonesia juga \cite{wilie2020indonlu}. Hasil dari pengujian tersebut adalah model yang mereka buat berhasil memperoleh tingkat akurasi yang lebih tinggi apabila dibandingkan dengan model - model lain seperti XLM atau mBERT yang memiliki dukungan untuk melakukan tugas prediksi dengan banyak bahasa sekaligus \cite{wilie2020indonlu}. Model kedua dibuat oleh Candra Wirawan dengan melatih model pada 520MB data berasal dari Wikipedia Indonesia dan 1GB data berasal dari teks berita Indonesia. Sayangnya, tidak ada informasi lebih lanjut pada model ini selain data yang dipakai untuk \textit{pre-training}.
+
+Selain model BERT yang hanya berisi bahasa Indonesia, kami juga melakukan percobaan pada model BERT yang mendukung \textit{multilanguage} dan model BERT yang hanya berisi bahasa Melayu. Bahasa Melayu dipilih karena kedekatan \textit{grammar} dan konteks dengan susunan kata berbahasa Indonesia. Untuk model yang mendukung \textit{multilanguage} kami menggunakan varian \textit{official} yang dibuat oleh Google, yaitu model \texttt{bert-multilingual-uncased} yang sudah mendukung 104 bahasa yang berasal dari Wikipedia. Sedangkan untuk model dengan bahasa Melayu, kami menggunakan model \texttt{bert-base-bahasa-standard-cased} yang sudah dilatih di beberapa sumber seperti Wikipedia, Wattpad, Berita, Sosial Media dan masih banyak lagi \cite{Malaya}
+
+\begin{table}
+    \centering
+    \caption{Konfigurasi yang digunakan oleh model BERT yang digunakan}
+    \label{tab:multi_bert_config}
+    \begin{tabular}{|p{.5\linewidth}|c|l|p{.12\linewidth} |}
+        \hline
+        Model                          & epoch & dropout & learning rates \\ \hline
+        bert-base-bahasa-standard-case & 4     & 0.2     & 2e-5           \\ \hline
+        bert-base-multilingual-uncased & 4     & 0.2     & 2e-5           \\ \hline
+        indobert-base-p1               & 3     & 0.1     & 2e-5           \\ \hline
+        bert-base-indonesian-522M      & 3     & 0.1     & 2e-5           \\ \hline
+        bert-base-indonesian-1.5G      & 3     & 0.2     & 2e-5           \\ \hline
+    \end{tabular}
+\end{table}
+
+Untuk melakukan \textit{training}, sebelumnya kami mengatur konfigurasi yang akan digunakan oleh model BERT yang sudah disiapkan. Terdapat beberapa perbedaan pada konfigurasi seperti jumlah \textit{epoch} dan jumlah \textit{dropout}. Hal ini karena pada beberapa model, apabila menggunakan konfigurasi \textit{default} akan terjadi \textit{overfit} yang cukup parah.
+
+\begin{table}
+    \centering
+    \caption{Tingkat Akurasi dari seluruh model BERT yang digunakan}
+    \label{tab:model_bert_result}
+    \begin{tabular}{|l|l|l|l|l|p{.12\linewidth}|}
+        \hline
+        \textbf{model} & \textit{\textbf{recall}} & \textit{\textbf{precision}} & \textit{\textbf{f1-score}} & \textit{\textbf{accuracy}} & \textbf{avg. training time} \\ \hline
+        bert-bahasa    & 89\%                     & 82\%                        & 85\%                       & 85\%                       & 03:43                       \\ \hline
+        bert-base      & \textbf{97\%}            & 75\%                        & 85\%                       & 86\%                       & 02:07                       \\ \hline
+        indobert       & 89\%                     & \textbf{90\%}               & \textbf{89\%}              & \textbf{89\%}              & 02:05                       \\ \hline
+        cahya-522M     & 88\%                     & 80\%                        & 84\%                       & 84\%                       & \textbf{02:03}              \\ \hline
+        cahya-1.5G     & 93\%                     & 80\%                        & 86\%                       & 87\%                       & 02:08                       \\ \hline
+    \end{tabular}
+\end{table}
