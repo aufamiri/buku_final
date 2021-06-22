@@ -45,6 +45,11 @@
 % Digunakan untuk menampilkan pustaka.
 \usepackage[square,comma,numbers,sort&compress]{natbib}
 
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{multirow}
+
+
 % Mengubah format ukuran teks pada natbib.
 \renewcommand{\bibfont}{\normalfont\footnotesize}
 
@@ -55,6 +60,7 @@
 \patchcmd{\NAT@test}{\else \NAT@nm}{\else \NAT@hyper@{\NAT@nm}}{}{}
 \makeatother
 
+\usepackage[hyphens]{url}
 % Digunakan untuk menambah hyperlink pada referensi.
 \usepackage{hyperref}
 

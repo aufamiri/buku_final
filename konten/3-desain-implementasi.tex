@@ -6,7 +6,7 @@ Paper ini membahas mengenai implementasi salah satu cabang ilmu dalam \textit{de
 
 \begin{figure} [ht]
     \centering
-    \includegraphics[width=0.3\linewidth]{gambar/metodologi_long.png}
+    \includegraphics[width=0.3\columnwidth]{gambar/metodologi_vertical.png}
     \caption{Garis besar metodologi penelitian.}
     \label{fig:metodologi}
 \end{figure}
@@ -60,8 +60,8 @@ Dataset tersebut berisi isi berita disertai dengan label Valid atau Hoaks. Sumbe
     \end{tabular}
 \end{table}
 
-\subsection{Pembuatan Dataset}
-Berhubung dataset dari \url{https://data.mendeley.com/datasets/p3hfgr5j3m/1} dirasa sangat kurang karena hanya berjumlah 600 data saja. Maka dari itu kami membuat sebuah program \textit{web crawling} yang digunakan untuk mengambil teks berita dari beberapa situs berita yang sudah terakreditasi seperti \url{liputan6.com}, \url{detik.com}, \url{tempo.com}. Sedangkan untuk teks berita hoaks, sumber yang kami gunakan adalah \url{turnbackhoax.id}.
+\subsection{Akuisisi Data}
+Berhubung dataset dari \url{https://data.mendeley.com/datasets/p3hfgr5j3m/1} dirasa sangat kurang karena hanya berjumlah 600 data saja. Maka dari itu kami membuat sebuah program \textit{web crawling} yang digunakan untuk mengambil teks berita dari beberapa situs berita yang sudah terakreditasi seperti \url{liputan6.com}, \url{detik.com}, \url{tempo.com}. Sedangkan untuk teks berita hoaks, sumber yang kami gunakan adalah \url{turnbackhoax.id}. Alasan kami menggunakan situs \url{turnbackhoax.id} adalah karena dibalik situs tersebut terdapat suatu forum yang cukup aktif, setiap berita hoaks yang ditemukan akan diunggah ke forum tersebut terlebih dahulu sebelum akhirnya akan diunggah ke situs utama, diharapkan dengan proses semacam itu, maka suatu unggahan sudah dilihat oleh orang lain selama beberapa kali sehingga menurunkan kemungkinan terjadi bias. Selain itu, situs \url{turnbackhoax.id} juga menuliskan teks asli dari berita hoaks yang diunggah dan memiliki suatu format dalam setiap unggahan di situs tersebut sehingga memudahkan untuk melakukan \textit{webcrawling}.
 
 Gambar \ref{fig:webcrawl_method} adalah gambaran garis besar yang kami lakukan dalam program \textit{web crawl} kami. Dimulai dengan memasukkan kode HTML mentah, kemudian merubah kode mentah tersebut menjadi objek yang lebih mudah untuk dilakukan pemrosesan dalam python, mengambil teks berita dan melakukan pembersihan terhadap teks tersebut, terakhir menghasilkan keluaran berupa file .CSV dengan format yang sesuai.
 
@@ -105,7 +105,7 @@ Terakhir, adalah melakukan keluaran berupa \textit{file} .CSV. Alasan menggunaka
 
 Untuk memudahkan penggunaan perangkat lunak \textit{webcrawler} yang kami buat, kami menggunakan berkas dengan format .json untuk mengatur sumber, banyak berita dan filter tanggal yang nantinya akan dibaca oleh program dan mengambil berita dengan filter tersebut.
 
-\subsection{Preprocessing}
+\subsection{\textit{Preprocessing}}
 
 \begin{figure}[h!]
     \begin{center}
@@ -168,9 +168,9 @@ Salah satu hal yang membedakan antara BERT dengan model - model yang lain adalah
 \end{figure*}
 
 
-Dalam penelitian ini, kami menggunakan pendekatan \textit{fine-tuning}, dimana model BERT yang sudah di \textit{pre-training} sebelumnya, akan kami gabungkan dengan \textit{layer} klasifikasi. Dalam hal ini, kami menggunakan \textit{Linear Regression} sebagai \textit{layer} klasifikasi. Gambar \ref{fig:bert_arch} merupakan arsitektur BERT untuk penelitian ini.
+Dalam penelitian ini, kami menggunakan pendekatan \textit{fine-tuning}, dimana model BERT yang sudah di \textit{pre-training} sebelumnya, akan kami gabungkan dengan \textit{layer} klasifikasi. Dalam hal ini, kami menggunakan \textit{Linear Regression} sebagai \textit{layer} klasifikasi. Gambar \ref{fig: bert_arch} merupakan arsitektur BERT untuk penelitian ini.
 
-\subsection{Training}
+\subsection{\textit{Training} dan Validasi}
 
 \begin{figure}[h!]
     \begin{center}
@@ -190,12 +190,14 @@ Pada tahap ini juga dilakukan pengaturan ukuran \textit{batch}, \textit{learning
 
 \textit{learning rate} adalah seberapa banyak \textit{hiperparameter} yang dirubah selama proses \textit{training}. \textit{hiperparameter} digunakan untuk merubah \textit{weight} selama proses \textit{training} berdasarkan \textit{feedback} saat proses validasi. Disini kami menggunakan nilai yang direkomendasikan oleh pembuat model BERT yang kami gunakan, yaitu 0.00002 \cite{koto2020indolem}.
 
-\subsection{Validasi}
+Selanjutnya, dari model yang sudah dibentuk pada saat proses \textit{training}, akan dilakukan pengujian terhadap data yang sama sekali baru dan tidak digunakan selama proses \textit{training}. Hal ini untuk menghindari bias yang mungkin terjadi apabila model diuji pada data yang sama yang digunakan pada saat proses \textit{training}. Proses inilah yang disebut dengan proses validasi.
 
-Dari model yang sudah dibentuk pada saat proses \textit{training}, akan dilakukan pengujian terhadap data yang sama sekali baru dan tidak digunakan selama proses \textit{training}. Hal ini untuk menghindari bias yang mungkin terjadi apabila model diuji pada data yang sama yang digunakan pada saat proses \textit{training}. Proses inilah yang disebut dengan proses validasi.
-
-Berdasarkan dari data akurasi yang didapat dari proses validasi, maka dapat diambil keputusan apakah masih diperlukan optimisasi dan melakukan \textit{training} lagi, atau akurasi yang didapat sudah dianggap cukup baik.
+Hasil validasi model akan diambil nilai \textit{loss}-nya dan dibandingkan dengan nilai \textit{loss} pada saat proses \textit{training}. Apabila nilai \textit{loss} validasi semakin tinggi, namun nilai \textit{loss training} semakin rendah, maka model sudah mengalami \textit{overfitting}, sebaliknya, apabila baik nilai \textit{loss training} dan nilai \textit{loss} validasi masih tinggi, kemungkinan model mengalami \textit{underfitting}. Kedua kondisi tersebut merupakan tanda bahwa model masih dapat dioptimisasi lagi, sehingga harus dilakukan \textit{re-training} sambil menyesuaikan parameter yang diberikan.
 
 \subsection{Pengujian}
 
 Setelah melakukan proses validasi dan \textit{training}, maka yang harus dilakukan adalah melakukan pengujian terhadap model yang sudah dibuat. Dari proses ini dapat diambil kesimpulan apakah model tersebut sudah cukup baik, ataukah masih dapat dilakukan perbaikan atau optimisasi lagi salah satunya dengan cara mengatur ulang konfigurasi - konfigurasi yang sudah diatur pada saat proses \textit{training}.
+
+\subsection{Analisa Performa}
+
+Setelah melakukan proses pengujian, langkah berikutnya adalah melakukan analisa perforrma pada model yang sudah dibuat. Hal ini untuk mengetahui bagaimana kira - kira performa model pada saat sudah diimplementasi. Untuk analisa performa ini akan digunakan beberapa metode seperti \textit{confusion matrix} agar mendapat pengelompokkan berdasarkan hasil prediksi dan dataset acuan sehingga menjadi \textit{True Positive} (TP), \textit{False Positive} (FP), \textit{True Negative} (TN), dan \textit{False Negative} (FN). Selain itu, penelitian ini juga akan menggunakan rumus - rumus seperti \textit{Recall, Precision, F1-score}.
