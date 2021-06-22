@@ -13,7 +13,7 @@ Pada penelitian ini dipaparkan hasil pengujian serta analisis yang dilakukan ses
 
 Pada pengujian, masing - masing model menggunakan Google Collab dengan spesifikasi \textit{hardware} seperti yang dilampirkan pada tabel \ref{tab:specs_collab}
 
-\begin{table}
+\begin{table}[h]
     \caption{spesifikasi PC yang digunakan}
     \label{tab:specs_collab}
     \centering
@@ -51,7 +51,7 @@ Pengujian performa berdasar pada penggalan kata yang diambil ini bertujuan untuk
 
 Dari total data yang berjumlah 1621 data, akan diambil 18\% nya sebagai dataset pengujian, sehingga berjumlah 292 dataset sebagai pengujian. Parameter pada pengujian untuk \textit{training} di atur agar sama untuk setiap pengujian, \textit{epoch} sebesar 7, \textit{leearning rate} sebesar 2e-5, dan \textit{epsilon} sebesar 1e-8, hal yang sama juga dilakukan pada model, pengujian ini menggunakan model BERT yang telah di-\textit{pre-trained} oleh Indobert. Untuk lebih jelasnya, silahkan lihat Tabel \ref{tab: truncate_param} yang berisi rincian parameter dan model yang digunakan untuk proses \textit{training}.
 
-\begin{table}
+\begin{table}[h]
     \caption{Konfigurasi Parameter Untuk Pengujian berdasarkan Pemotongan Kata}
     \label{tab: truncate_param}
     \centering
@@ -66,7 +66,7 @@ Dari total data yang berjumlah 1621 data, akan diambil 18\% nya sebagai dataset 
 
 Keluaran dari model akan dibandingkan dengan label pada dataset, yang kemudian akan dihitung untuk menghasilkan \textit{confusion matrix}, \textit{recall, precision, accuracy} dan \textit{f1-score} sesuai dengan rumus yang telah dijelaskan sebelumnya.
 
-\begin{table}
+\begin{table}[h]
     \centering
     \caption{Performa pada pengujian berdasar pada lokasi pemotongan kata}
     \label{tab: truncate_result}
@@ -88,15 +88,27 @@ Terdapat banyak sekali model BERT yang sudah dibuat oleh berbagai orang di inter
 \begin{enumerate}
     \item bert-base-bahasa-standard-case
 
-          Merupakan model BERT yang dibuat oleh
+          Merupakan model BERT yang dibuat oleh huzeinzol05. Model ini hanya mendukung bahasa Melayu, namun pembuat model ini mengklaim bahwa model yang telah dibuat dapat digunakan untuk bahasa melayu maupun bahasa Indonesia karena kesamaan tata bahasa dan arti. Model dilatih pada dataset yang diambil dari Wikipedia berbahasa melayu, Wattpad, dan sosial media \cite{Malaya}.
+
+    \item bert-base-multilingual-uncased
+
+          Model BERT ini adalah model dasar yang dibuat langsung oleh tim di Google. Model inilah yang merupakan hasil dari penelitian yang sudah dibuat oleh devlin et al dalam penelitian awal mengenai metode BERT ini. Dilatih menggunakan seluruh data yang dimiliki oleh Wikipedia, sehingga salah satu kelebihan dari model ini adalah kemampuannya dalam mendukung 104 bahasa sekaligus \cite{devlin2019bert}.
+
+    \item indobert-base-p1
+
+          Model BERT ini adalah salah satu model BERT yang spesifik mendukung bahasa Indonesia. Model ini dibuat oleh indobenchmark sebagai bagian dari penelitian untuk uji \textit{benchmarking} pada \textit{Natural Language Understanding} (NLU) berbahasa Indonesia. Diantara model - model BERT khusus bahasa Indonesia yang lain, model ini adalah model yang dilatih pada dataset terbanyak, yaitu sebesar 23 GB lebih data yang berasal dari berbagai sumber seperti Wikipedia, Twitter, OpenSubtitle, dan banyak lagi \cite{wilie2020indonlu}.
+
+    \item bert-base-indonesian-522M
+
+          Model BERT yang spesifik mendukung hanya bahasa Indonesia yang dibuat oleh Cahya Wirawan. Model ini dilatih menggunakan 522M data yang semuanya berasal dari Wikipedia. Merupakan model dengan jumlah \textit{pretrained} dataset yang paling sedikit dibandingkan model - model yang lainnya.
+
+    \item bert-base-indonesian-1.5G
+
+          Sama seperti model sebelumnya, model ini juga dibuat oleh Cahya Wirawan. Yang menjadi pembeda dengan model sebelumnya adalah adanya penambahan dataset sebesar 1G dari situs - situs berita berbahasa Indonesia yang membuat total dataset yang digunakan pada waktu \textit{pre-trained} adalah sebesar 1.5G
 
 \end{enumerate}
 
-Untuk model BERT yang menggunakan hanya bahasa Indonesia, terdapat 2 model yang bisa ditemukan pada waktu buku ini ditulis. Yang pertama dibuat oleh Bryan Wilie et al., sebagai bagian dari pengujian \textit{benchmark} berbahasa Indonesia dengan model BERT yang dilatih khusus dengan dataset berbahasa Indonesia juga \cite{wilie2020indonlu}. Hasil dari pengujian tersebut adalah model yang mereka buat berhasil memperoleh tingkat akurasi yang lebih tinggi apabila dibandingkan dengan model - model lain seperti XLM atau mBERT yang memiliki dukungan untuk melakukan tugas prediksi dengan banyak bahasa sekaligus \cite{wilie2020indonlu}. Model kedua dibuat oleh Candra Wirawan dengan melatih model pada 520MB data berasal dari Wikipedia Indonesia dan 1GB data berasal dari teks berita Indonesia. Sayangnya, tidak ada informasi lebih lanjut pada model ini selain data yang dipakai untuk \textit{pre-training}.
-
-Selain model BERT yang hanya berisi bahasa Indonesia, kami juga melakukan percobaan pada model BERT yang mendukung \textit{multilanguage} dan model BERT yang hanya berisi bahasa Melayu. Bahasa Melayu dipilih karena kedekatan \textit{grammar} dan konteks dengan susunan kata berbahasa Indonesia. Untuk model yang mendukung \textit{multilanguage} kami menggunakan varian \textit{official} yang dibuat oleh Google, yaitu model \texttt{bert-multilingual-uncased} yang sudah mendukung 104 bahasa yang berasal dari Wikipedia. Sedangkan untuk model dengan bahasa Melayu, kami menggunakan model \texttt{bert-base-bahasa-standard-cased} yang sudah dilatih di beberapa sumber seperti Wikipedia, Wattpad, Berita, Sosial Media dan masih banyak lagi \cite{Malaya}
-
-\begin{table}
+\begin{table}[h]
     \centering
     \caption{Konfigurasi yang digunakan oleh model BERT yang digunakan}
     \label{tab:multi_bert_config}
@@ -111,9 +123,9 @@ Selain model BERT yang hanya berisi bahasa Indonesia, kami juga melakukan percob
     \end{tabular}
 \end{table}
 
-Untuk melakukan \textit{training}, sebelumnya kami mengatur konfigurasi yang akan digunakan oleh model BERT yang sudah disiapkan. Terdapat beberapa perbedaan pada konfigurasi seperti jumlah \textit{epoch} dan jumlah \textit{dropout}. Hal ini karena pada beberapa model, apabila menggunakan konfigurasi \textit{default} akan terjadi \textit{overfit} yang cukup parah.
+Untuk melakukan \textit{training}, sebelumnya kami mengatur konfigurasi yang akan digunakan oleh model BERT yang sudah disiapkan. Tabel \ref{tab:multi_bert_config} adalah rincian konfigurasi yang kami gunakan pada setiap model. Terdapat beberapa perbedaan pada konfigurasi seperti jumlah \textit{epoch} dan jumlah \textit{dropout}. Hal ini karena apabila menggunakan parameter yang sama untuk setiap model, terdapat model yang mengalami \textit{overfitting} dan ada juga model yang dirasa belum optimal.
 
-\begin{table}
+\begin{table}[h]
     \centering
     \caption{Tingkat Akurasi dari seluruh model BERT yang digunakan}
     \label{tab:model_bert_result}
@@ -127,3 +139,5 @@ Untuk melakukan \textit{training}, sebelumnya kami mengatur konfigurasi yang aka
         cahya-1.5G     & 93\%                     & 80\%                        & 86\%                       & 87\%                       & 02:08                       \\ \hline
     \end{tabular}
 \end{table}
+
+Dari tabel \ref{tab:model_bert_result}, dapat disimpulkan bahwa apabila suatu model BERT menggunakan dataset yang sedikit pada waktu \textit{pre-training}, maka waktu yang diperlukan untuk melakukan \textit{fine-tuning} juga semakin sedikit, namun hal ini dibayar dengan tingkat akurasi yang lebih rendah apabila dibandingkan dengan model yang lain. Hal lain menunjukkan bahwa model BERT berbahasa Melayu kurang cocok digunakan sebagai pendeteksi berita palsu berbahasa Indonesia. Model yang dibuat oleh indobenchmark memiliki tingkat akurasi yang paling bagus dan disertai dengan nilai \textit{precision} dan \textit{recall} yang seimbang sehingga lebih dapat diandalkan dalam mendeteksi berita palsu.
