@@ -6,9 +6,10 @@
 Pada penelitian ini dipaparkan hasil pengujian serta analisis yang dilakukan sesuai dengan desain sistem yang sudah dirancang pada bab sebelumnya. Dataset yang digunakan berasal dari \url{data.mendeley.com} ditambah dengan dataset yang berasal dari proses \textit{webcrawling} sendiri. Pengujian dilakukan dengan beberapa bagian sebagai berikut :
 
 \begin{enumerate}[nolistsep]
-    \item Pengujian Performa berdasar pada Penggalan Kata yang Diambil
-    \item Pengujian Performa berdasarkan model BERT yang digunakan
-    \item Pengujian Performa berdasarkan Pendekatan Cara \textit{Training}.
+    \item Pengujian performa berdasar pada penggalan kata yang diambil
+    \item Pengujian performa berdasarkan model BERT yang digunakan
+    \item Pengujian performa berdasarkan pada metode \textit{transformer} yang digunakan.
+    \item Pengujian performa berdasarkan pendekatan cara \textit{training}.
 \end{enumerate}
 
 Pada pengujian, masing - masing model menggunakan Google Collab dengan spesifikasi \textit{hardware} seperti yang dilampirkan pada tabel \ref{tab:specs_collab}
@@ -28,7 +29,7 @@ Pada pengujian, masing - masing model menggunakan Google Collab dengan spesifika
     \end{tabular}
 \end{table}
 
-\subsection{Pengujian Performa berdasar pada Penggalan Kata yang Diambil}
+\subsection{Pengujian performa berdasar pada penggalan kata yang diambil}
 
 Untuk saat ini, BERT hanya dapat memproses sebanyak 512 token sekaligus. Sehingga, untuk melakukan pemprosesan pada data dengan teks yang panjang, diperlukan pemotongan teks agar panjang teks menjadi sesuai.
 
@@ -81,28 +82,28 @@ Keluaran dari model akan dibandingkan dengan label pada dataset, yang kemudian a
 
 Seperti bisa dilihat pada tabel \ref{tab: truncate_result}, metode pemotongan teks dengan hanya mengambil bagian awal saja memiliki tingkat akurasi yang paling tinggi dan memiliki nilai \textit{recall} dan \textit{precision} yang seimbang. Hal ini berbeda dengan apabila dilakukan pemotongan pada bagian akhir teks yang menunjukkan ada kemungkinan lebih besar bagi model untuk mengklasifikasi suatu teks berita termasuk ke dalam berita palsu. Metode pemotongan yang menggabungkan 129 token dari awal dan 383 token dari bagian akhir teks memiliki rasio nilai \textit{recall} dan \textit{precision} yang bagus juga sama seperti rasio nilai pada pemotongan pada bagian awal teks, namun, secara isi nilai masih kalah.
 
-\subsection{Pengujian Performa berdasarkan model BERT yang digunakan}
+\subsection{Pengujian performa berdasarkan model BERT yang digunakan}
 
 Terdapat banyak sekali model BERT yang sudah dibuat oleh berbagai orang di internet, ada model yang memiliki kemampuan \textit{multilanguage} sehingga bisa digunakan di berbagai bahasa sekaligus, namun kebanyakan model yang beredar adalah model yang menggunakan bahasa yang spesifik. Hal ini karena waktu \textit{pre-training} yang lebih singkat karena dataset yang lebih sedikit apabila dibandingkan model dengan kemampuan \textit{multilanguage} dan karena waktu \textit{pre-training} lebih sedikit, maka sumber daya yang digunakan juga menjadi lebih sedikit. Selain itu, dan hal ini adalah yang paling penting, hasil akurasi dari model yang hanya menggunakan 1 bahasa memiliki tingkat akurasi yang lebih tinggi apabila dibandingkan dengan model dengan banyak bahasa sekaligus. Maka dari itu, kami menggunakan beberapa model dengan rincian sebagai berikut :
 
 \begin{enumerate}
-    \item bert-base-bahasa-standard-case
+    \item bert-base-bahasa-standard-case \textit{(bert-bahasa)}
 
           Merupakan model BERT yang dibuat oleh huzeinzol05. Model ini hanya mendukung bahasa Melayu, namun pembuat model ini mengklaim bahwa model yang telah dibuat dapat digunakan untuk bahasa melayu maupun bahasa Indonesia karena kesamaan tata bahasa dan arti. Model dilatih pada dataset yang diambil dari Wikipedia berbahasa melayu, Wattpad, dan sosial media \cite{Malaya}.
 
-    \item bert-base-multilingual-uncased
+    \item bert-base-multilingual-uncased \textit{(bert-base)}
 
           Model BERT ini adalah model dasar yang dibuat langsung oleh tim di Google. Model inilah yang merupakan hasil dari penelitian yang sudah dibuat oleh devlin et al dalam penelitian awal mengenai metode BERT ini. Dilatih menggunakan seluruh data yang dimiliki oleh Wikipedia, sehingga salah satu kelebihan dari model ini adalah kemampuannya dalam mendukung 104 bahasa sekaligus \cite{devlin2019bert}.
 
-    \item indobert-base-p1
+    \item indobert-base-p1 \textit{(indobert)}
 
           Model BERT ini adalah salah satu model BERT yang spesifik mendukung bahasa Indonesia. Model ini dibuat oleh indobenchmark sebagai bagian dari penelitian untuk uji \textit{benchmarking} pada \textit{Natural Language Understanding} (NLU) berbahasa Indonesia. Diantara model - model BERT khusus bahasa Indonesia yang lain, model ini adalah model yang dilatih pada dataset terbanyak, yaitu sebesar 23 GB lebih data yang berasal dari berbagai sumber seperti Wikipedia, Twitter, OpenSubtitle, dan banyak lagi \cite{wilie2020indonlu}.
 
-    \item bert-base-indonesian-522M
+    \item bert-base-indonesian-522M \textit{(cahya-522M)}
 
           Model BERT yang spesifik mendukung hanya bahasa Indonesia yang dibuat oleh Cahya Wirawan. Model ini dilatih menggunakan 522M data yang semuanya berasal dari Wikipedia. Merupakan model dengan jumlah \textit{pretrained} dataset yang paling sedikit dibandingkan model - model yang lainnya.
 
-    \item bert-base-indonesian-1.5G
+    \item bert-base-indonesian-1.5G \textit{(cahya-1.5G)}
 
           Sama seperti model sebelumnya, model ini juga dibuat oleh Cahya Wirawan. Yang menjadi pembeda dengan model sebelumnya adalah adanya penambahan dataset sebesar 1G dari situs - situs berita berbahasa Indonesia yang membuat total dataset yang digunakan pada waktu \textit{pre-trained} adalah sebesar 1.5G
 
@@ -141,3 +142,118 @@ Untuk melakukan \textit{training}, sebelumnya kami mengatur konfigurasi yang aka
 \end{table}
 
 Dari tabel \ref{tab:model_bert_result}, dapat disimpulkan bahwa apabila suatu model BERT menggunakan dataset yang sedikit pada waktu \textit{pre-training}, maka waktu yang diperlukan untuk melakukan \textit{fine-tuning} juga semakin sedikit, namun hal ini dibayar dengan tingkat akurasi yang lebih rendah apabila dibandingkan dengan model yang lain. Hal lain menunjukkan bahwa model BERT berbahasa Melayu kurang cocok digunakan sebagai pendeteksi berita palsu berbahasa Indonesia. Model yang dibuat oleh indobenchmark memiliki tingkat akurasi yang paling bagus dan disertai dengan nilai \textit{precision} dan \textit{recall} yang seimbang sehingga lebih dapat diandalkan dalam mendeteksi berita palsu.
+
+\subsection{Pengujian performa berdasarkan pada metode \textit{transformer} yang digunakan.}
+
+BERT adalah metode \textit{state-of-the-art} dan pengembangan lebih lanjut dari \textit{transformer}. Namun, selain BERT, ada beberapa pengembangan lebih lanjut lain dari \textit{transformer} dimana masing - masing memiliki keuntungan dan kekurangannya masing - masing. Maka dari itu, kami menguji bagaimana performa metode BERT dalam mendeteksi berita hoaks berbahasa Indoensia. Sebagai penyamaan dan sebagai variabel kontrol, kami menggunakan model yang dibuat oleh orang yang sama, yaitu Cahya Wirawan dan di-\textit{pretrained} dengan sumber dan jumlah dataset yang sama, yaitu sebesar 522M. Berikut adalah rincian dari metode yang kami gunakan dalam pengujian ini :
+
+\begin{enumerate}
+    \item ROBERTA
+
+          Merupakan pengembangan lebih lanjut dari BERT. Dalam jurnal awalnya, ROBERTA dilatih menggunakan \textit{dynamically masking}, berbeda dengan \textit{static masking} yang digunakan oleh BERT. Selain itu, ROBERTA dilatih dengan dataset yang lebih besar apabila dibandingkan dengan BERT yang pada akhirnya, membuat waktu yang dibutuhkan ROBERTA untuk melakukan \textit{pre-training} menjadi lebih lama \cite{roberta}.
+
+    \item GPT-2
+
+          Adalah model yang terkenal karena kemampuannya dalam melakukan pembuatan teks secara otomatis namun masih dapat dimengerti oleh manusia dan masih memiliki konteks dalam suatu kalimat. Salah satu yang membedakan antara BERT dengan GPT-2 adalah bagaimana \textit{attention head}-nya di konfigurasi, dimana dalam BERT \textit{attention head} akan melihat kanan dan kiri suatu kata, sedangkan GPT-2 hanya melihat bagian kanan saja.
+
+    \item BERT
+
+          Model BERT ini merupakan model BERT yang sama seperti sebelum - sebelumnya, dimana model yang digunakan adalah model \textit{bert-base-indonesian-522M} oleh Cahya Wirawan. Walaupun pada pengujian sebelumnya model ini memiliki tingkat akurasi yang paling kecil, namun, disaat yang bersamaan model ini adalah model dengan waktu tercepat dalam melakukan \textit{training}.
+\end{enumerate}
+
+\begin{table}[h]
+    \centering
+    \caption{Konfigurasi yang digunakan oleh model transformer yang digunakan}
+    \label{tab: transformer_config}
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{Model} & \textit{\textbf{epoch}} & \textit{\textbf{dropout}} & \textit{\textbf{learning rates}} \\ \hline
+        Roberta        & 3                       & 0.2                       & 2e-6                             \\ \hline
+        GPT-2          & 2                       & -                         & 2e-5                             \\ \hline
+        BERT           & 3                       & 0.1                       & 2e-5                             \\ \hline
+    \end{tabular}
+\end{table}
+
+Sedangkan pada tabel \ref{tab: transformer_config} merupakan konfigurasi yang digunakan pada pengujian ini. Terdapat perbedaan dalam pengaturan agar model mencapai hasil yang optimal, GPT-2 menggunakan \textit{epoch} yang paling rendah dikarenakan tidak adanya parameter \textit{dropout} pada bagian \textit{classifier}.
+
+\begin{table}[h]
+    \centering
+    \caption{Tingkat Akurasi dari Model Transformer yang Digunakan}
+    \label{tab: model_transformer_result}
+    \begin{tabular}{|l|l|l|l|l|p{.12\linewidth}|}
+        \hline
+        \textbf{model} & \textit{\textbf{recall}} & \textit{\textbf{precision}} & \textit{\textbf{f1-score}} & \textit{\textbf{accuracy}} & \textbf{avg. training time} \\ \hline
+        ROBERTA        & \textbf{90\%}            & 73\%                        & 80\%                       & 82\%                       & 02:12                       \\ \hline
+        GPT-2          & 86\%                     & \textbf{81\%}               & 83\%                       & 83\%                       & 02:15                       \\ \hline
+        BERT           & 88\%                     & 80\%                        & \textbf{84\%}              & \textbf{84\%}              & \textbf{02:03}              \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Pengujian performa berdasarkan pendekatan cara \textit{training}}
+
+Selain membandingkan antara model - model yang sudah dibuat sebelumnya oleh beberapa orang di internet, kami juga mencoba untuk memperbaiki model kami sehingga menjadi model yang lebih optimal dibandingkan sebelumnya. Untuk pengujian ini, kami menggunakan model \textit{indobert-base-p1} karena model tersebut memiliki tingkat akurasi yang paling tinggi dibandingkan model - model yang lain pada pengujian - pengujian sebelumnya. Dibawah ini adalah rincian dari pendekatan yang kami lakukan :
+
+\begin{enumerate}
+    \item parameter \textit{freeze}
+
+          Yang dimaksud dengan parameter \textit{freeze} adalah ketika suatu model yang sudah di-\textit{pretrained} sebelumnya tidak akan dirubah lagi \textit{weight}-nya dan masih menggunakan nilai \textit{weight} yang didapat pada waktu \textit{pretrained}.
+
+    \item \textit{dropout}
+
+          \textit{dropout} adalah parameter yang digunakan oleh \textit{optimizer} untuk melakukan penghapusan nilai \textit{weight} sehingga kembali menjadi kondisi awal. Keuntungan dari penghapusan \textit{weight} ini adalah untuk menghindari kemungkinan \textit{overfit} dan membuat model lebih tahan terhadap perubahan data sebagai masukan.
+\end{enumerate}
+
+\begin{table}[h]
+    \centering
+    \caption{Konfigurasi yang digunakan saat melakukan pengujian pendekatan training}
+    \label{tab: training_config}
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{Model}            & \textit{\textbf{epoch}} & \textit{\textbf{dropout}} & \textit{\textbf{learning rates}} \\ \hline
+        \textit{baseline}         & 3                       & 0.1                       & 2e-5                             \\ \hline
+        parameter \textit{freeze} & 50                      & 0.1                       & 2e-5                             \\ \hline
+        \textit{dropout}          & 3                       & 0.2                       & 2e-5                             \\ \hline
+    \end{tabular}
+\end{table}
+
+
+Tabel \ref{tab: training_config} adalah rincian parameter yang kami gunakan dalam pengujian ini. Pada parameter \textit{freeze} kami mengatur \textit{epoch} sebanyak 50 dan masih belum mengalami \textit{overfit} sehingga dapat diteruskan sampai mencapai titik optimal. Namun, karena perubahan nilai \textit{loss} yang terjadi sudah sangat kecil, kami memutuskan untuk menghentikan pengujian pada 50 \textit{epoch}.
+
+\begin{table}[h]
+    \centering
+    \caption{Tingkat Akurasi Pada Pengujian pendekatan cara training}
+    \label{tab: model_training_result}
+    \begin{tabular}{|p{.12\linewidth}|l|l|l|l|p{.12\linewidth}|}
+        \hline
+        \textbf{model}            & \textit{\textbf{recall}} & \textit{\textbf{precision}} & \textit{\textbf{f1-score}} & \textit{\textbf{accuracy}} & \textbf{avg. training time} \\ \hline
+        \textit{baseline}         & 89\%                     & \textbf{90\%}               & \textbf{89\%}              & \textbf{89\%}              & 02:05                       \\ \hline
+        parameter \textit{freeze} & \textbf{90\%}            & 73\%                        & 81\%                       & 82\%                       & \textbf{00:44}              \\ \hline
+        \textit{dropout}          & 83\%                     & 88\%                        & 85\%                       & 84\%                       & 03:44                       \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width= 0.9\linewidth]{gambar/loss_concat_awal.png}
+        \caption{Nilai \textit{loss} Acuan}
+        \label{fig: loss_baseline}
+    \end{center}
+\end{figure}
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width= 0.9\linewidth]{gambar/loss_freeze_50.png}
+        \caption{Nilai \textit{loss} saat melakukan \textit{training} dengan parameter \textit{freeze}}
+        \label{fig: loss_freeze}
+    \end{center}
+\end{figure}
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width= 0.9\linewidth]{gambar/loss_dropout_new.png}
+        \caption{nilai \textit{loss} saat melakukan \textit{training} dengan merubah \textit{dropout}}
+        \label{fig: loss_dropout}
+    \end{center}
+\end{figure}
+
+Berdasarkan tabel \ref{tab: model_training_result}, dapat disimpulkan bahwa pada saat melakukan pendekatan berupa parameter \textit{freeze}, waktu \textit{training} menjadi jauh lebih singkat, hal ini karena \textit{optimizer} tidak perlu menghitung ulang \textit{weight} pada setiap \textit{node} dari BERT. Namun, apabila melihat grafik acuan pada gambar \ref{fig: loss_baseline}, terlihat model acuan mengalami sedikit \textit{overfit},  berbeda dengan saat melakukan pendekatan \textit{dropout} dimana grafik \textit{loss} seperti bisa dilihat pada gambar \ref{fig: loss_dropout}, masih menunjukkan grafik yang bagus dan model tidak \textit{overfit} dan memiliki tingkat akurasi yang tidak terpaut jauh dibanding model acuan.
